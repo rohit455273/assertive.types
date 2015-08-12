@@ -50,6 +50,9 @@ Wrappers to functions in `utils`:
 
 ### Assertions
 
-Predicates return a single logical value have one corresponding assertion.
+Predicates that return a vector have two corresponding assertions.  For example,
+`is_class` has `assert_all_are_classes` and `assert_any_are_classes`.
+
+Predicates returning a single logical value have one corresponding assertion.
 For example, `is_array` has `assert_is_array`.
 
