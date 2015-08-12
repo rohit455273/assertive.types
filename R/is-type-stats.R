@@ -14,7 +14,7 @@ is_leaf <- function(x, .xname = get_name_in_parent(x))
   leaf <- attr(x, "leaf")
   if(is.null(leaf)) 
   {
-    return(false("%s has no 'leaf' attribute.", .xname))
+    return(false(gettext("%s has no 'leaf' attribute."), .xname))
   }
   ok <- is_identical_to_true(
     leaf, 
@@ -43,7 +43,7 @@ is_stepfun <- function(x, .xname = get_name_in_parent(x))
   if(!(ok <- is_function(x))) return(ok)
   if(!is.stepfun(x))
   {
-    return(false("%s is not a step function.", .xname))
+    return(false(gettext("%s is not a step function."), .xname))
   }
   TRUE
 } 

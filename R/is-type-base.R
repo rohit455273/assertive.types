@@ -233,7 +233,7 @@ is_language <- function(x, .xname = get_name_in_parent(x))
   {
     return(
       false(
-        "%s is not a language object (name, call or expression).", 
+        gettext("%s is not a language object (name, call or expression)."), 
         .xname
       )
     )
@@ -342,7 +342,7 @@ is_ordered <- function(x, .xname = get_name_in_parent(x))
   }
   if(!is.ordered(x))
   {
-    return(false("%s is not an ordered factor.", .xname))
+    return(false(gettext("%s is not an ordered factor."), .xname))
   }
   TRUE
 }
@@ -354,7 +354,7 @@ is_primitive <- function(x, .xname = get_name_in_parent(x))
   if(!(ok <- is_function(x))) return(ok)
   if(!is.primitive(x))
   {
-    return(false("%s is not a primitive function.", .xname))
+    return(false(gettext("%s is not a primitive function."), .xname))
   }
   TRUE
 } 
@@ -423,7 +423,7 @@ is_s4 <- function(x, .xname = get_name_in_parent(x))
 {
   if(!isS4(x))
   {
-    return(false("%s is not an S4 object.", .xname))
+    return(false(gettext("%s is not an S4 object."), .xname))
   }
   TRUE
 } 
