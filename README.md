@@ -26,7 +26,7 @@ install_bitbucket("richierocks/assertive.types")
 
 ### Predicates
 
-All the predicated in this package check for objects of specific types.
+All the predicates in this package check for objects of specific types.
 
 Wrappers to functions in `base`:
 
