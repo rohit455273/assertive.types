@@ -85,7 +85,7 @@ is_complex <- function(x, .xname = get_name_in_parent(x))
   is2(x, "complex", .xname)
 }       
 
-#' Checks to see if the input is a data.frame.
+#' Is the input is a data.frame?
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
@@ -132,7 +132,7 @@ is_expression <- function(x, .xname = get_name_in_parent(x))
   is2(x, "expression", .xname)
 }
 
-#' Is the input an factor?
+#' Is the input a factor?
 #'
 #' Checks to see if the input is an factor.
 #'
