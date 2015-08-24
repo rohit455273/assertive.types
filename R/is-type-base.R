@@ -3,6 +3,8 @@
 #' Checks to see if the input is an array or matrix.
 #'
 #' @param x Input to check.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @param .xname Not intended to be used directly.
 #' @return \code{is_array} and \code{is_matrix} wrap \code{is.array}, 
 #' and \code{is.matrix} respectively, providing more information on
@@ -36,6 +38,8 @@ is_call <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_character} wraps \code{is.character}, providing more 
 #' information on failure. \code{is_a_string} returns \code{TRUE} if the 
 #' input is character and scalar. \code{is_an_empty_string} returns \code{TRUE}
@@ -63,6 +67,8 @@ is_character <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_complex} wraps \code{is.complex}, providing more 
 #' information on failure. \code{is_a_bool} returns \code{TRUE} if the 
 #' input is complex and scalar.  The \code{assert_*} functions return
@@ -89,6 +95,8 @@ is_complex <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_data.frame} wraps \code{is.data.frame}, 
 #' providing more information on failure.  \code{assert_is_data.frame} 
 #' returns nothing but throws an error if \code{is_data.frame} 
@@ -110,6 +118,8 @@ is_data.frame <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_environment} wraps \code{is.environment}, providing more 
 #' information on failure.  \code{assert_is_environment} returns nothing
 #' but throws an error if \code{is_environment} returns \code{FALSE}.
@@ -138,6 +148,8 @@ is_expression <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_factor} wraps \code{is.factor}, providing more 
 #' information on failure.  \code{assert_is_factor} returns nothing
 #' but throws an error if \code{is_factor} returns \code{FALSE}.
@@ -157,6 +169,8 @@ is_factor <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_function}, \code{is_primitive} and \code{is_stepfun}
 #' wrap \code{is.function}, \code{is.primitive} and \code{is.stepfun} 
 #' repsectively, providing more information on failure.  The 
@@ -179,6 +193,8 @@ is_function <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_integer} wraps \code{is.integer}, providing more 
 #' information on failure. \code{is_an_integer} returns \code{TRUE} if the 
 #' input is an integer and scalar.  The \code{assert_*} functions return 
@@ -205,6 +221,8 @@ is_integer <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_call}, \code{is_expression}, \code{is_language}, 
 #' \code{is_name} and \code{is_symbol} wrap the corresponding \code{is.*}
 #' functions, providing more information on failure.  The \code{assert_*}
@@ -247,6 +265,8 @@ is_language <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_list} wraps \code{is.list}, providing more 
 #' information on failure.
 #' @seealso \code{\link[base]{is.list}}.
@@ -267,6 +287,8 @@ is_list <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_logical} wraps \code{is.logical}, providing more 
 #' information on failure. \code{is_a_bool} returns \code{TRUE} if the 
 #' input is logical and scalar.  The \code{assert_*} functions return
@@ -310,6 +332,8 @@ is_name <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_numeric} wraps \code{is.numeric}, providing more 
 #' information on failure. \code{is_a_number} returns \code{TRUE} if the 
 #' input is numeric and scalar.  The \code{assert_*} functions return nothing
@@ -365,6 +389,8 @@ is_primitive <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_qr} wraps \code{is.qr}, providing more 
 #' information on failure.  \code{assert_is_qr} returns nothing but
 #' throws an error if \code{is_qr} returns \code{FALSE}.
@@ -384,6 +410,8 @@ is_qr <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_raw} wraps \code{is.raw}, providing more 
 #' information on failure. \code{is_a_raw} returns \code{TRUE} if the 
 #' input is raw and scalar.  The \code{assert_*} functions return nothing but
@@ -410,6 +438,8 @@ is_raw <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_S4} wraps \code{isS4}, providing more information on 
 #' failure.  \code{assert_is_S4} returns nothing but throws an error if
 #' \code{is_S4} returns \code{FALSE}.
@@ -446,6 +476,8 @@ is_symbol <- is_name
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_table} wraps \code{is.table}, providing more 
 #' information on failure.  \code{assert_is_table} returns nothing but
 #' throws an error if \code{is_table} returns \code{FALSE}.

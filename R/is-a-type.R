@@ -64,6 +64,8 @@ is_an_integer <- function(x, .xname = get_name_in_parent(x))
 #' @param x Any R variable.
 #' @param classes A character vector of classes.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{TRUE} if \code{x} inherits from at least one of the classes,
 #' as determined by \code{\link[base]{inherits}}.
 #' @seealso \code{\link[base]{inherits}}, \code{\link{is2}}

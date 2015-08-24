@@ -4,6 +4,8 @@
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_leaf} reimplements \code{is.leaf}, providing more 
 #' information on failure.
 #' @seealso \code{\link[stats]{dendrogram}}.
@@ -54,6 +56,8 @@ is_stepfun <- function(x, .xname = get_name_in_parent(x))
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_ts} wraps \code{is.ts}, providing more 
 #' information on failure.  \code{assert_is_ts} returns nothing but
 #' throws an error if \code{is_ts} returns \code{FALSE}.

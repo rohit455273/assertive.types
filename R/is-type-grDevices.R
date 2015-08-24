@@ -4,6 +4,8 @@
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_raster} wraps \code{is.raster}, providing more 
 #' information on failure. \code{is_a_raster} returns \code{TRUE} if the 
 #' input is raster and scalar.  The \code{assert_*} functions return nothing but

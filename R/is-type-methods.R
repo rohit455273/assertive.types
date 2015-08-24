@@ -4,6 +4,8 @@
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_class} is a vectorised wrapper for \code{isClass}.  
 #' \code{assert_is_class} returns nothing but throws an error if 
 #' \code{is_class} returns \code{FALSE}.
