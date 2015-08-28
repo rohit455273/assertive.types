@@ -22,7 +22,9 @@ Imports:
     stats
 Suggests:
     testthat,
-    devtools
+    devtools,
+    data.table,
+    dplyr
 License: GPL (>= 3)
 LazyLoad: yes
 LazyData: yes
@@ -35,12 +37,16 @@ Collate:
     'imports.R'
     'assert-is-a-type.R'
     'assert-is-type-base.R'
+    'assert-is-type-data.table.R'
+    'assert-is-type-dplyr.R'
     'assert-is-type-grDevices.R'
     'assert-is-type-methods.R'
     'assert-is-type-stats.R'
     'assert-is-type-utils.R'
     'is-a-type.R'
     'is-type-base.R'
+    'is-type-data.table.R'
+    'is-type-dplyr.R'
     'is-type-grDevices.R'
     'is-type-methods.R'
     'is-type-stats.R'
