@@ -89,3 +89,16 @@ assert_is_message <- function(x,
   )
 }
 
+#' @rdname is_try_error
+#' @export
+assert_is_condition <- function(x, 
+  severity = getOption("assertive.severity", "stop"))
+{                                                         
+  assert_engine(
+    is_warning, 
+    x, 
+    .xname = get_name_in_parent(x),
+    severity = severity
+  )
+}
+
