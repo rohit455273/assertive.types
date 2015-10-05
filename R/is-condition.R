@@ -1,6 +1,6 @@
-#' Is the input a date?
+#' Is the input a condition?
 #'
-#' Checks to see if the input is a Date or POSIXt object.
+#' Checks to see if the input is a message, warning or error.
 #'
 #' @param x Input to check.
 #' @param severity How severe should the consequences of the assertion be?  

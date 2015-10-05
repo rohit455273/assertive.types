@@ -1,6 +1,6 @@
-#' Is the input a data.table?
+#' Is the input a tbl?
 #'
-#' Checks to see if the input is a data.table.
+#' Checks to see if the input is a tbl.
 #'
 #' @param x Input to check.
 #' @param .xname Not intended to be used directly.
