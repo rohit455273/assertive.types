@@ -42,12 +42,7 @@ is_call <- function(x, .xname = get_name_in_parent(x))
 #' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_character} wraps \code{is.character}, providing more 
 #' information on failure. \code{is_a_string} returns \code{TRUE} if the 
-#' input is character and scalar. \code{is_an_empty_string} returns \code{TRUE}
-#' if the input is \code{""}.  \code{is_numeric_string} is vectorised, 
-#' returning \code{TRUE} when the inputs are not \code{NA} after conversion
-#' to character and then numeric. \code{is_missing_or_empty_string} is
-#' also vectorised, returning \code{TRUE} when the input is \code{""} or
-#' \code{NA}.
+#' input is character and scalar.
 #' The \code{assert_*} functions return nothing but throw an error if the
 #' corresponding \code{is_*} function returns \code{FALSE}.
 #' @seealso \code{\link[base]{is.character}} and \code{\link{is_scalar}}.
@@ -70,7 +65,7 @@ is_character <- function(x, .xname = get_name_in_parent(x))
 #' @param severity How severe should the consequences of the assertion be?  
 #' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{is_complex} wraps \code{is.complex}, providing more 
-#' information on failure. \code{is_a_bool} returns \code{TRUE} if the 
+#' information on failure. \code{is_a_complex} returns \code{TRUE} if the 
 #' input is complex and scalar.  The \code{assert_*} functions return
 #' nothing but throw an error if the corresponding \code{is_*} function
 #' returns \code{FALSE}.
