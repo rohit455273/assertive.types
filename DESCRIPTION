@@ -1,8 +1,8 @@
 Package: assertive.types
 Type: Package
 Title: Assertions to Check Types of Variables
-Version: 0.0-1
-Date: 2015-08-11
+Version: 0.0-2
+Date: 2015-10-27
 Author: Richard Cotton [aut, cre]
 Maintainer: Richard Cotton <richierocks@gmail.com>
 Authors@R: person("Richard", "Cotton", role = c("aut", "cre"), email =
@@ -16,7 +16,7 @@ BugReports: https://bitbucket.org/richierocks/assertive.types/issues
 Depends:
     R (>= 3.0.0)
 Imports:
-    assertive.base,
+    assertive.base (>= 0.0-3),
     assertive.properties,
     methods,
     stats
