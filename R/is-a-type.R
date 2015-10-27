@@ -21,6 +21,16 @@ is_a_complex <- function(x, .xname = get_name_in_parent(x))
 #' @rdname is_numeric
 #' @importFrom assertive.properties is_scalar
 #' @export
+is_a_double <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_double(x, .xname))) return(ok)
+  if(!(ok <- is_scalar(x, .xname = .xname))) return(ok)
+  TRUE
+} 
+
+#' @rdname is_numeric
+#' @importFrom assertive.properties is_scalar
+#' @export
 is_a_number <- function(x, .xname = get_name_in_parent(x))
 {
   if(!(ok <- is_numeric(x, .xname))) return(ok)

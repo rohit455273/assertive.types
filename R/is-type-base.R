@@ -107,6 +107,14 @@ is_data.frame <- function(x, .xname = get_name_in_parent(x))
   is2(x, "data.frame", .xname)
 }
 
+#' @rdname is_numeric
+#' @importFrom assertive.base is2
+#' @export
+is_double <- function(x, .xname = get_name_in_parent(x))
+{
+  is2(x, "double", .xname)
+}
+
 #' Is the input an environment?
 #'
 #' Checks to see if the input is an environment.
@@ -334,16 +342,26 @@ is_name <- function(x, .xname = get_name_in_parent(x))
 #' input is numeric and scalar.  The \code{assert_*} functions return nothing
 #' but throw an error if the corresponding \code{is_*} function returns 
 #' \code{FALSE}.
-#' @seealso \code{\link[base]{is.numeric}} and \code{\link{is_scalar}}.
+#' @note \code{numeric} means either double or integer, inc this case.
+#' @seealso \code{\link{is_integer}}, \code{\link[base]{is.numeric}} and 
+#' \code{\link{is_scalar}}.
 #' @examples
+#' # "numeric" fns work on double or integers; 
 #' assert_is_numeric(1:10)
+#' 
+#' # Here we check for length 1 as well as type
 #' assert_is_a_number(pi)
 #' assert_is_a_number(1L)
 #' assert_is_a_number(NA_real_)
+#' 
+#' # "double" fns fail for integers.
+#' assert_is_a_double(pi)
+#' 
 #' #These examples should fail.
 #' assertive.base::dont_stop(assert_is_numeric(c(TRUE, FALSE)))
 #' assertive.base::dont_stop(assert_is_a_number(1:10))
 #' assertive.base::dont_stop(assert_is_a_number(numeric()))
+#' assertive.base::dont_stop(assert_is_double(1:10))
 #' @importFrom assertive.base is2
 #' @export
 is_numeric <- function(x, .xname = get_name_in_parent(x))

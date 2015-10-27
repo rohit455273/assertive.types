@@ -115,6 +115,19 @@ assert_is_data.frame <- function(x,
   )
 }
 
+#' @rdname is_numeric
+#' @export
+assert_is_double <- function(x, 
+  severity = getOption("assertive.severity", "stop"))
+{                                                         
+  assert_engine(
+    is_double, 
+    x, 
+    .xname = get_name_in_parent(x),
+    severity = severity
+  )
+}
+
 #' @rdname is_environment
 #' @export
 assert_is_environment <- function(x, 

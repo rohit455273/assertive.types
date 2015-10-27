@@ -27,6 +27,19 @@ assert_is_a_complex <- function(x,
 
 #' @rdname is_numeric
 #' @export
+assert_is_a_double <- function(x, 
+  severity = getOption("assertive.severity", "stop"))
+{                                                          
+  assert_engine(
+    is_a_double, 
+    x, 
+    .xname = get_name_in_parent(x), 
+    severity = severity
+  )
+}
+
+#' @rdname is_numeric
+#' @export
 assert_is_a_number <- function(x, 
   severity = getOption("assertive.severity", "stop"))
 {                                                          
