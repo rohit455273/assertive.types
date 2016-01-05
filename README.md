@@ -1,6 +1,7 @@
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/0.1.0/active.svg)](http://www.repostatus.org/#active)
 [![Is the package on CRAN?](http://www.r-pkg.org/badges/version/assertive.types)](http://www.r-pkg.org/pkg/assertive.types)
-[![Build Status](https://semaphoreci.com/api/v1/projects/4bd0f182-fbc5-4c70-876b-e6f9570fdf3c/635195/badge.svg)](https://semaphoreci.com/richierocks/assertive-types)
+[![SemaphoreCI Build Status](https://semaphoreci.com/api/v1/projects/4bd0f182-fbc5-4c70-876b-e6f9570fdf3c/635195/badge.svg)](https://semaphoreci.com/richierocks/assertive-types)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/fb50ck21nm0os9rd?svg=true)](https://ci.appveyor.com/project/richierocks/assertive-types)
 
 # assertive.types
 
