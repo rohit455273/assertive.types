@@ -78,7 +78,8 @@ is_an_integer <- function(x, .xname = get_name_in_parent(x))
 #' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
 #' @return \code{TRUE} if \code{x} inherits from at least one of the classes,
 #' as determined by \code{\link[base]{inherits}}.
-#' @seealso \code{\link[base]{inherits}}, \code{\link{is2}}
+#' @seealso \code{\link[base]{inherits}}, \code{\link[methods]{is}}, 
+#' \code{\link[assertive.base]{is2}}
 #' @examples
 #' x <- structure(1:5, class = c("foo", "bar"))
 #' assert_is_inherited_from(x, c("foo", "baz"))
@@ -90,12 +91,13 @@ is_inherited_from <- function(x, classes, .xname = get_name_in_parent(x))
   ok <- bapply(classes, function(class) inherits(x, class))
   if(!any(ok)) 
   {
+    msg <- ngettext(
+      length(classes),
+      "%s does not inherit from the class %s. It has class %s.",
+      "%s does not inherit from any of the classes %s. It has class %s."
+    )
     return(
-      false(
-        "%s does not inherit from any of the classes %s.", 
-        .xname, 
-        toString(classes)
-      )
+      false(msg, .xname, toString(classes), toString(class(x)))
     )
   }
   TRUE

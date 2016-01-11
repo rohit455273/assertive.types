@@ -163,5 +163,20 @@ test_that("test.is_inherited_from.x_only_inherited_from_some_classes.returns_tru
 
 test_that("test.is_inherited_from.x_not_inherited",  {
   x <- structure(1:5, class = c("foo", "bar"))
-  expect_false(is_inherited_from(x, "baz"))   
+  expect_false(actual <- is_inherited_from(x, "baz"))
+  expect_equal(
+    cause(actual),
+    noquote("x does not inherit from the class baz. It has class foo, bar.")
+  )
 })
+
+
+test_that("test.is_inherited_from.x_not_inherited_from_multiple",  {
+  x <- structure(1:5, class = c("foo", "bar"))
+  expect_false(actual <- is_inherited_from(x, c("baz", "quux")))
+  expect_equal(
+    cause(actual),
+    noquote("x does not inherit from any of the classes baz, quux. It has class foo, bar.")
+  )
+})
+
