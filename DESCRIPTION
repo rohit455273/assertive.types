@@ -22,7 +22,6 @@ Imports:
     stats
 Suggests:
     testthat,
-    devtools,
     data.table,
     dplyr
 License: GPL (>= 3)
