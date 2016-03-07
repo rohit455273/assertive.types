@@ -1,1 +1,4 @@
+0.0-2 Added is_formula and variants.
+      Added is_double and assertions.
+      Some better error messages.
 0.0-1 Content extracted from assertive 0.3-0, and tidied.
