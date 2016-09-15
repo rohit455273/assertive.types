@@ -1,3 +1,4 @@
+0.0-3 Added is_pairlist.
 0.0-2 Added is_formula and variants.
       Added is_double and assertions.
       Some better error messages.

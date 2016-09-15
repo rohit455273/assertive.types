@@ -284,6 +284,19 @@ assert_is_ordered <- function(x,
   )
 }
 
+#' @rdname is_list
+#' @export
+assert_is_pairlist <- function(x, 
+  severity = getOption("assertive.severity", "stop"))
+{                                                         
+  assert_engine(
+    is_pairlist, 
+    x, 
+    .xname = get_name_in_parent(x),
+    severity = severity
+  )
+}
+
 #' @rdname is_function
 #' @export
 assert_is_primitive <- function(x, 

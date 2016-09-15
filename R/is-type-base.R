@@ -275,8 +275,12 @@ is_language <- function(x, .xname = get_name_in_parent(x))
 #' @seealso \code{\link[base]{is.list}}.
 #' @examples
 #' assert_is_list(list(1,2,3))
+#' assert_is_pairlist(.Options)
 #' #These examples should fail.
-#' assertive.base::dont_stop(assert_is_list(1:10))
+#' assertive.base::dont_stop({
+#'   assert_is_list(1:10)
+#'   assert_is_pairlist(options())
+#' })
 #' @importFrom assertive.base is2
 #' @export
 is_list <- function(x, .xname = get_name_in_parent(x))
@@ -382,6 +386,13 @@ is_ordered <- function(x, .xname = get_name_in_parent(x))
     return(false(gettext("%s is not an ordered factor."), .xname))
   }
   TRUE
+}
+
+#' @rdname is_list
+#' @export
+is_pairlist <- function(x, .xname = get_name_in_parent(x))
+{
+  is2(x, "pairlist", .xname)
 }
 
 #' @rdname is_function

@@ -1,8 +1,8 @@
 Package: assertive.types
 Type: Package
 Title: Assertions to Check Types of Variables
-Version: 0.0-2
-Date: 2016-03-06
+Version: 0.0-3
+Date: 2016-09-15
 Author: Richard Cotton [aut, cre]
 Maintainer: Richard Cotton <richierocks@gmail.com>
 Authors@R: person("Richard", "Cotton", role = c("aut", "cre"), email =
@@ -57,3 +57,4 @@ Collate:
     'is-type-stats.R'
     'is-type-utils.R'
 RoxygenNote: 5.0.1
+ByteCompile: true
