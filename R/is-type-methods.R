@@ -23,3 +23,15 @@ is_class <- function(x, .xname = get_name_in_parent(x))
   x <- coerce_to(x, "character")
   bapply(x, methods::isClass)
 }
+
+#' @importFrom methods is
+#' @rdname is_s4
+#' @export
+is_ref_class <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!is(x, "envRefClass"))
+  {
+    return(false(gettext("%s is not a reference class"), .xname))
+  }
+  TRUE
+}
