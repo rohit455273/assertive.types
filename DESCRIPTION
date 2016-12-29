@@ -18,6 +18,7 @@ Depends:
 Imports:
     assertive.base (>= 0.0-3),
     assertive.properties,
+    codetools,
     methods,
     stats
 Suggests:

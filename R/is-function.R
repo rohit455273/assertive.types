@@ -1,32 +1,67 @@
 
 # Constants ---------------------------------------------------------------
 
+S3_PRIMITIVE_GENERICS <- mget(.S3PrimitiveGenerics, envir = baseenv())
+
 # Listed in tools:::.get_S3_primitive_generics
 # Same as S4 group generics, but with extra ! and without log2 and log10
-S3_GROUP_GENERICS <- c(
-  "abs", "sign", "sqrt", 
-   "floor", "ceiling", "trunc", "round", "signif", "exp", 
-   "log", "expm1", "log1p", "cos", "sin", "tan", "acos", 
-   "asin", "atan", "cosh", "sinh", "tanh", "acosh", 
-   "asinh", "atanh", "lgamma", "gamma", "digamma", "trigamma", 
-   "cumsum", "cumprod", "cummax", "cummin", "+", "-", 
-   "*", "/", "^", "%%", "%/%", "&", "|", "!", "==", 
-   "!=", "<", "<=", ">=", ">", "all", "any", "sum", 
-   "prod", "max", "min", "range", "Arg", "Conj", "Im", 
-   "Mod", "Re"
+S3_GROUP_GENERICS <- mget(
+  c(
+  "abs", "sign", "sqrt", "floor", "ceiling", "trunc", "round", "signif", "exp", 
+  "log", "expm1", "log1p", "cos", "sin", "tan", "acos", "asin", "atan", "cosh", 
+  "sinh", "tanh", "acosh", "asinh", "atanh", "lgamma", "gamma", "digamma", 
+  "trigamma", "cumsum", "cumprod", "cummax", "cummin", "+", "-", "*", "/", "^", 
+  "%%", "%/%", "&", "|", "!", "==", "!=", "<", "<=", ">=", ">", "all", "any", 
+  "sum", "prod", "max", "min", "range", "Arg", "Conj", "Im", "Mod", "Re"
+  ),
+  envir = baseenv()
 )
 
-S3_NON_PRIMITIVE_NON_GROUP_GENERICS <- c(
-  "[", "[[", "$", "[<-", "[[<-", "$<-", "as.vector", "unlist"
+S3_NON_PRIMITIVE_NON_GROUP_GENERICS <- mget(
+  c("[", "[[", "$", "[<-", "[[<-", "$<-", "as.vector", "unlist"),
+  envir = baseenv()
 )
+
+#' @importFrom methods getGeneric
+S4_GROUP_GENERICS <- local(
+  {
+    groups <- c("Arith", "Compare", "Logic", "Math", "Math2", "Summary", "Complex")
+    names(groups) <- groups
+    lapply(
+      groups, 
+      function(group)
+      {
+        # simplified version of methods::getGroupMembers(group)
+        mget(unlist(getGeneric(group)@groupMembers), envir = baseenv())
+      }
+    )
+  }
+)
+
+BASE_S3_METHODS <- as.list(baseenv()$.__S3MethodsTable__.)
 
 # Utilities ---------------------------------------------------------------
 
+#' Does the function call another function?
+#' 
+#' Operator wrapper to \code{\link[codetools]{findGlobals}}.
+#' @param caller_fn A closure function.
+#' @param callee_fn_name A character vector of function names.
+#' @return \code{TRUE} if \code{caller_fn} calls any the the functions named in
+#' \code{callee_fn_name}.
+#' @details The LHS is a function and the RHS is a character vector because 
+#' that is how \code{\link[codetools]{findGlobals}} works.
 #' @importFrom codetools findGlobals
+#' @noRd
 `%calls%` <- function(caller_fn, callee_fn_name)
 {
   fns_called <- codetools::findGlobals(caller_fn, merge = FALSE)$functions
   any(fns_called %in% callee_fn_name)
+}
+
+`%fn_in%` <- function(x, y)
+{
+  any(vapply(y, identical, logical(1), x, ignore.environment = TRUE))
 }
 
 # Types: closure/builtin/special ------------------------------------------
@@ -58,6 +93,9 @@ is_typeof_function <- function(x, type, .xname = get_name_in_parent())
 #' closure function that calls \code{\link[base]{.Internal}}.  The 
 #' \code{assert_*} function returns nothing but throw an error if the 
 #' corresponding \code{is_*} function returns \code{FALSE}.
+#' @references There is some discussion of closure vs. builtin vs. special
+#' functions in the Argument Evaluation section of R-internals.
+#' \url{https://cran.r-project.org/doc/manuals/r-devel/R-ints.html#Argument-evaluation}
 #' @seealso \code{\link[base]{is.function}} and its assertive wrapper
 #' \code{\link{is_function}}.
 #' \code{\link[base]{typeof}} is used to distinguish the three types 
@@ -121,11 +159,14 @@ is_special_function <- function(x, .xname = get_name_in_parent())
 #' corresponding \code{is_*} function returns \code{FALSE}.
 #' @seealso \code{\link[base]{is.function}} and its assertive wrapper
 #' \code{\link{is_function}}.
-#' @references This function is based upon \code{is_internal}, a function that 
-#' is internal to the \code{pryr} package.
+#' @references This function is modeled upon \code{is_internal}, internal to the
+#' \code{pryr} package.
+#' The differences between the \code{.Internal} and \code{.Primitive} interfaces
+#' to C code are discussed in R-Internals, in the chapter Internal vs. Primitive.
+#' \url{https://cran.r-project.org/doc/manuals/r-devel/R-ints.html#g_t_002eInternal-vs-_002ePrimitive}
 #' @examples
-#' assert_is_function(sqrt)
-#' assert_is_function(function(){})
+#' assert_is_internal_function(sqrt)
+#' assert_is_internal_function(function(){})
 #' @export
 is_internal_function <- function(x, .xname = get_name_in_parent(x))
 {
@@ -155,6 +196,7 @@ is_internal_function <- function(x, .xname = get_name_in_parent(x))
 #' 
 #' Checks whether the input is an S3 generic or method.
 #' @param x Input to check.
+#' @param groups A character vector of S4 group generic groups.
 #' @param .xname Not intended to be used directly.
 #' @param severity How severe should the consequences of the assertion be?  
 #' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
@@ -164,10 +206,30 @@ is_internal_function <- function(x, .xname = get_name_in_parent(x))
 #' corresponding \code{is_*} function returns \code{FALSE}.
 #' @seealso \code{\link[base]{is.function}} and its assertive wrapper
 #' \code{\link{is_function}}.
-#' @references \code{is_s3_generic} is based upon \code{\link[pryr]{is_s3_generic}}.
-#' Similarly, \code{is_s3_method} is based upon \code{\link[pryr]{is_s3_method}},
-#' with some ideas from \code{\link[utils]{isS3method}}.
-#' 
+#' \code{\link{is_closure_function}} to check for closures/builtin and
+#' special functions.
+#' \code{\link{is_internal_function}} to check for functions that use the
+#' \code{\link[base]{.Internal}} interface to C code.
+#' @references \code{is_s3_generic} is based upon
+#' \code{\link[pryr]{is_s3_generic}}. Similarly, \code{is_s3_method} is based
+#' upon \code{find_generic}, internal to \code{pryr}, with some ideas from
+#' \code{\link[utils]{isS3method}}.
+#' \code{is_primitive_generic} checks for the functions listed by
+#' \code{\link[base]{.S3PrimitiveGenerics}}.
+#' \code{is_s3_group_generic} checks for the functions listed by 
+#' \code{.get_internal_S3_generics}, internal to the \code{tools} package.
+#' \code{is_s4_group_generic} checks for the functions listed by
+#' \code{\link[methods]{getGroupMembers}}. S4 group generics are mostly the same
+#' as S3 group generics, except that the not operator, \code{!}, is S3 group 
+#' generic but not S4, and \code{log2} and \code{log10} are S4
+#' group generic but not S3.
+#' \code{is_s3_internal_generic} checks for the functions listed by
+#' \code{.get_internal_S3_generics}, internal to the \code{tools} package.
+#' \code{internal_generics}, internal to \code{pryr} works similarly, though
+#' checks for S4 group generics rather than S3 group generics.
+#' There is some discussion of group generics scatterd throughout R-internals.
+#' In particular, see the section on the Mechanics of S4 Dispatch.
+#' \url{https://cran.r-project.org/doc/manuals/r-devel/R-ints.html#Mechanics-of-S4-dispatch}
 #' @examples
 #' # General check for S3 generics and methods
 #' is_s3_generic(is.na)
@@ -179,7 +241,11 @@ is_internal_function <- function(x, .xname = get_name_in_parent(x))
 #' is_s3_internal_generic(unlist)
 #' 
 #' # S4 group generics are mostly the same as S3 group generics
-#' is_s3_group_generic(cosh)
+#' is_s4_group_generic(cosh)
+#' 
+#' # Renaming functions is fine
+#' not <- `!`
+#' is_s3_group_generic(not)
 #' 
 #' # Some failures
 #' assertive.base::dont_stop({
@@ -220,7 +286,7 @@ is_s3_method <- function(x, .xname = get_name_in_parent(x))
     return(ok)
   }
   # For speed, rule out some common choices
-  if(.xname %in% names(baseenv()$.__S3MethodsTable__.))
+  if(x %fn_in% BASE_S3_METHODS)
   {
     return(TRUE)
   }
@@ -255,7 +321,7 @@ is_s3_primitive_generic <- function(x, .xname = get_name_in_parent(x))
   {
     return(ok)
   }
-  if(!(.xname %in% .S3PrimitiveGenerics))
+  if(!(x %fn_in% S3_PRIMITIVE_GENERICS))
   {
     return(false("%s is not an S3 primitive generic function.", .xname))
   }
@@ -270,7 +336,7 @@ is_s3_group_generic <- function(x, .xname = get_name_in_parent(x))
   {
     return(ok)
   }
-  if(!.xname %in% S3_GROUP_GENERICS)
+  if(!x %fn_in% S3_GROUP_GENERICS)
   {
     return(false("%s is not an S3 group generic function.", .xname))
   }
@@ -281,7 +347,7 @@ is_s3_group_generic <- function(x, .xname = get_name_in_parent(x))
 #' @export
 is_s4_group_generic <- function(x, 
   groups = c("Arith", "Compare", "Ops", "Logic", "Math", "Math2", "Summary", "Complex"), 
-  msg, .xname = get_name_in_parent(x))
+  .xname = get_name_in_parent(x))
 {
   if(!(ok <- is_function(x)))
   {
@@ -292,14 +358,14 @@ is_s4_group_generic <- function(x,
   {
     groups <- unique(c(groups[groups != "Ops"], "Arith", "Compare", "Logic"))
   }
-  # simplified version of methods::getGroupMembers(group)
   fns <- unlist(
-    lapply(groups, function(x) getGeneric(x)@groupMembers), 
+    S4_GROUP_GENERICS[groups], 
+    recursive = FALSE,
     use.names = FALSE
   )
-  if(!.xname %in% fns)
+  if(!x %fn_in% fns)
   {
-    return(false("%s is not an internal group generic %s.", group, msg))
+    return(false("%s is not an internal group generic function.", .xname))
   }
   TRUE
 }
@@ -313,7 +379,7 @@ is_s3_internal_generic <- function(x, .xname = get_name_in_parent(x))
   {
     return(ok)
   }
-  if(!.xname %in% c(.S3PrimitiveGenerics, S3_GROUP_GENERICS, S3_NON_PRIMITIVE_NON_GROUP_GENERICS))
+  if(!x %fn_in% c(S3_PRIMITIVE_GENERICS, S3_GROUP_GENERICS, S3_NON_PRIMITIVE_NON_GROUP_GENERICS))
   {
     return(false("%s is not an S3 internal generic function.", .xname))
   }
