@@ -66,7 +66,7 @@ BASE_S3_METHODS <- as.list(baseenv()$.__S3MethodsTable__.)
 
 # Types: closure/builtin/special ------------------------------------------
 
-is_typeof_function <- function(x, type, .xname = get_name_in_parent())
+is_typeof_function <- function(x, type, .xname = get_name_in_parent(x))
 {
   if(!(ok <- is_function(x)))
   {
@@ -76,7 +76,7 @@ is_typeof_function <- function(x, type, .xname = get_name_in_parent())
   if(typeof_x != type)
   {
     return(
-      false("%s is not a % function; it is a %s function", .xname, type, typeof_x)
+      false("%s is not a %s function; it is a %s function.", .xname, type, typeof_x)
     )
   }
   TRUE
@@ -123,21 +123,21 @@ is_typeof_function <- function(x, type, .xname = get_name_in_parent())
 #' assert_is_builtin_function("mean")
 #' })
 #' @export
-is_closure_function <- function(x, .xname = get_name_in_parent())
+is_closure_function <- function(x, .xname = get_name_in_parent(x))
 {
   is_typeof_function(x, "closure", .xname)
 }
 
 #' @rdname is_closure_function
 #' @export
-is_builtin_function <- function(x, .xname = get_name_in_parent())
+is_builtin_function <- function(x, .xname = get_name_in_parent(x))
 {
   is_typeof_function(x, "builtin", .xname)
 }
 
 #' @rdname is_closure_function
 #' @export
-is_special_function <- function(x, .xname = get_name_in_parent())
+is_special_function <- function(x, .xname = get_name_in_parent(x))
 {
   is_typeof_function(x, "special", .xname)
 }
@@ -165,8 +165,16 @@ is_special_function <- function(x, .xname = get_name_in_parent())
 #' to C code are discussed in R-Internals, in the chapter Internal vs. Primitive.
 #' \url{https://cran.r-project.org/doc/manuals/r-devel/R-ints.html#g_t_002eInternal-vs-_002ePrimitive}
 #' @examples
+#' # Some common fns calling .Internal
+#' is_internal_function(unlist)
+#' is_internal_function(cbind)
+#' 
+#' # Some failures
+#' assertive.base::dont_stop({
+#' assert_is_internal_function("unlist")
 #' assert_is_internal_function(sqrt)
 #' assert_is_internal_function(function(){})
+#' })
 #' @export
 is_internal_function <- function(x, .xname = get_name_in_parent(x))
 {
@@ -184,7 +192,7 @@ is_internal_function <- function(x, .xname = get_name_in_parent(x))
   if(!x %calls% ".Internal")
   {
     return(
-      false("%s is not an internal function.", .xname)
+      false("%s does not call .Internal.", .xname)
     )
   }
   TRUE

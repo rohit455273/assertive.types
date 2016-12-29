@@ -39,6 +39,7 @@ Collate:
     'assert-is-condition.R'
     'assert-is-date.R'
     'assert-is-formula.R'
+    'assert-is-function.R'
     'assert-is-type-base.R'
     'assert-is-type-data.table.R'
     'assert-is-type-dplyr.R'
