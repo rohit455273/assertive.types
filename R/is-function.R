@@ -118,7 +118,7 @@ is_typeof_function <- function(x, type, .xname = get_name_in_parent(x))
 #' is_special_function(`~`)
 #' 
 #' # some failure messages
-#' dont_stop({
+#' assertive.base::dont_stop({
 #' assert_is_builtin_function(mean)
 #' assert_is_builtin_function("mean")
 #' })

@@ -36,7 +36,7 @@ test_that("test.is_a_complex.1.returns_false", {
   expect_false(actual)
   expect_equal(
     cause(actual), 
-    noquote("x is not of type 'complex'; it has class 'integer'.")
+    noquote("x is not of class 'complex'; it has class 'integer'.")
   )
 })
 
