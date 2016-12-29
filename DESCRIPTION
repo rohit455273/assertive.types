@@ -49,6 +49,7 @@ Collate:
     'is-condition.R'
     'is-date.R'
     'is-formula.R'
+    'is-function.R'
     'is-type-base.R'
     'is-type-data.table.R'
     'is-type-dplyr.R'

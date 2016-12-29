@@ -1,0 +1,321 @@
+
+# Constants ---------------------------------------------------------------
+
+# Listed in tools:::.get_S3_primitive_generics
+# Same as S4 group generics, but with extra ! and without log2 and log10
+S3_GROUP_GENERICS <- c(
+  "abs", "sign", "sqrt", 
+   "floor", "ceiling", "trunc", "round", "signif", "exp", 
+   "log", "expm1", "log1p", "cos", "sin", "tan", "acos", 
+   "asin", "atan", "cosh", "sinh", "tanh", "acosh", 
+   "asinh", "atanh", "lgamma", "gamma", "digamma", "trigamma", 
+   "cumsum", "cumprod", "cummax", "cummin", "+", "-", 
+   "*", "/", "^", "%%", "%/%", "&", "|", "!", "==", 
+   "!=", "<", "<=", ">=", ">", "all", "any", "sum", 
+   "prod", "max", "min", "range", "Arg", "Conj", "Im", 
+   "Mod", "Re"
+)
+
+S3_NON_PRIMITIVE_NON_GROUP_GENERICS <- c(
+  "[", "[[", "$", "[<-", "[[<-", "$<-", "as.vector", "unlist"
+)
+
+# Utilities ---------------------------------------------------------------
+
+#' @importFrom codetools findGlobals
+`%calls%` <- function(caller_fn, callee_fn_name)
+{
+  fns_called <- codetools::findGlobals(caller_fn, merge = FALSE)$functions
+  any(fns_called %in% callee_fn_name)
+}
+
+# Types: closure/builtin/special ------------------------------------------
+
+is_typeof_function <- function(x, type, .xname = get_name_in_parent())
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  typeof_x <- typeof(x)
+  if(typeof_x != type)
+  {
+    return(
+      false("%s is not a % function; it is a %s function", .xname, type, typeof_x)
+    )
+  }
+  TRUE
+}
+
+#' Is the input a closure, builtin or special function?
+#' 
+#' Checks to see if the input is a closure, builtin or special function. 
+#' @param x Input to check.
+#' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
+#' @return \code{is_internal_function} returns \code{TRUE} when the input is a 
+#' closure function that calls \code{\link[base]{.Internal}}.  The 
+#' \code{assert_*} function returns nothing but throw an error if the 
+#' corresponding \code{is_*} function returns \code{FALSE}.
+#' @seealso \code{\link[base]{is.function}} and its assertive wrapper
+#' \code{\link{is_function}}.
+#' \code{\link[base]{typeof}} is used to distinguish the three types 
+#' of function.
+#' @examples 
+#' # most functions are closures
+#' is_closure_function(mean)
+#' is_closure_function(lm)
+#' is_closure_function(summary)
+#' 
+#' # builtin functions are typically math operators, low level math functions
+#' # and commonly used functions
+#' is_builtin_function(`*`)
+#' is_builtin_function(cumsum)
+#' is_builtin_function(is.numeric)
+#' 
+#' # special functions are mostly language features 
+#' is_special_function(`if`)
+#' is_special_function(`return`)
+#' is_special_function(`~`)
+#' 
+#' # some failure messages
+#' dont_stop({
+#' assert_is_builtin_function(mean)
+#' assert_is_builtin_function("mean")
+#' })
+#' @export
+is_closure_function <- function(x, .xname = get_name_in_parent())
+{
+  is_typeof_function(x, "closure", .xname)
+}
+
+#' @rdname is_closure_function
+#' @export
+is_builtin_function <- function(x, .xname = get_name_in_parent())
+{
+  is_typeof_function(x, "builtin", .xname)
+}
+
+#' @rdname is_closure_function
+#' @export
+is_special_function <- function(x, .xname = get_name_in_parent())
+{
+  is_typeof_function(x, "special", .xname)
+}
+
+
+# Internal functions ------------------------------------------------------
+
+#' Is the input an internal function?
+#' 
+#' Checks to see if the input is an internal function. That is, it is a 
+#' non-primitive function that calls C-code via \code{\link[base]{.Internal}}.
+#' @param x Input to check.
+#' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
+#' @return \code{is_internal_function} returns \code{TRUE} when the input is a 
+#' closure function that calls \code{\link[base]{.Internal}}.  The 
+#' \code{assert_*} function returns nothing but throw an error if the 
+#' corresponding \code{is_*} function returns \code{FALSE}.
+#' @seealso \code{\link[base]{is.function}} and its assertive wrapper
+#' \code{\link{is_function}}.
+#' @references This function is based upon \code{is_internal}, a function that 
+#' is internal to the \code{pryr} package.
+#' @examples
+#' assert_is_function(sqrt)
+#' assert_is_function(function(){})
+#' @export
+is_internal_function <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  if(is.primitive(x))
+  {
+    return(
+      false("%s is a primitive function, thus cannot be internal.", .xname)
+    )
+  }
+  # should be guaranteed typeof(x) == "closure" now
+  if(!x %calls% ".Internal")
+  {
+    return(
+      false("%s is not an internal function.", .xname)
+    )
+  }
+  TRUE
+}
+
+# S3 Generics and methods -------------------------------------------------
+
+#' Is the input an S3 generic or method?
+#' 
+#' Checks whether the input is an S3 generic or method.
+#' @param x Input to check.
+#' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
+#' @return \code{is_internal_function} returns \code{TRUE} when the input is a 
+#' closure function that calls \code{\link[base]{.Internal}}.  The 
+#' \code{assert_*} function returns nothing but throw an error if the 
+#' corresponding \code{is_*} function returns \code{FALSE}.
+#' @seealso \code{\link[base]{is.function}} and its assertive wrapper
+#' \code{\link{is_function}}.
+#' @references \code{is_s3_generic} is based upon \code{\link[pryr]{is_s3_generic}}.
+#' Similarly, \code{is_s3_method} is based upon \code{\link[pryr]{is_s3_method}},
+#' with some ideas from \code{\link[utils]{isS3method}}.
+#' 
+#' @examples
+#' # General check for S3 generics and methods
+#' is_s3_generic(is.na)
+#' is_s3_method(is.na.data.frame)
+#' 
+#' # More specific types of S3 generic
+#' is_s3_primitive_generic(c)
+#' is_s3_group_generic(abs)
+#' is_s3_internal_generic(unlist)
+#' 
+#' # S4 group generics are mostly the same as S3 group generics
+#' is_s3_group_generic(cosh)
+#' 
+#' # Some failures
+#' assertive.base::dont_stop({
+#' assert_is_s3_primitive_generic(exp)
+#' assert_is_s4_group_generic(`!`)
+#' })
+#' @export
+is_s3_generic <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  if(is.primitive(x) || is_internal_function(x))
+  {
+    if(!is_s3_internal_generic(x, .xname = .xname))
+    {
+      return(false("%s is not an S3 generic function.", .xname))
+    }
+  } else 
+  {
+    if(!x %calls% "UseMethod")
+    {
+      return(false("%s is not an S3 generic function.", .xname))
+    }
+  }
+  TRUE
+}
+
+#' @rdname is_s3_generic
+#' @export
+is_s3_method <- function(x, .xname = get_name_in_parent(x))
+{
+  # Loosely modelled on pryr:::find_generic with ideas from
+  # utils::isS3method.
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  # For speed, rule out some common choices
+  if(.xname %in% names(baseenv()$.__S3MethodsTable__.))
+  {
+    return(TRUE)
+  }
+  splits <- strsplit(.xname, ".", fixed = TRUE)[[1]]
+  n <- length(splits)
+  if(n < 2L)
+  {
+    return(false("%s has no '.' in its name, so cannot be an S3 method.", .xname))
+  }
+  for(i in seq.int(1L, length(splits) - 1))
+  {
+    generic_name <- paste(splits[seq_len(i)], collapse = ".")
+    generic <- mget(generic_name, ifnotfound = NA, inherits = TRUE)[[1]]
+    # don't use is.na as it gives warning for function input
+    if(identical(generic, NA)) 
+    {
+      next
+    }
+    if(is_s3_generic(generic, .xname = generic_name))
+    {
+      return(TRUE)
+    }
+  }
+  return(false("%s is not an S3 method.", .xname))
+}
+
+#' @rdname is_s3_generic
+#' @export
+is_s3_primitive_generic <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  if(!(.xname %in% .S3PrimitiveGenerics))
+  {
+    return(false("%s is not an S3 primitive generic function.", .xname))
+  }
+  TRUE
+} 
+
+#' @rdname is_s3_generic
+#' @export
+is_s3_group_generic <- function(x, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  if(!.xname %in% S3_GROUP_GENERICS)
+  {
+    return(false("%s is not an S3 group generic function.", .xname))
+  }
+  TRUE
+}
+
+#' @rdname is_s3_generic
+#' @export
+is_s4_group_generic <- function(x, 
+  groups = c("Arith", "Compare", "Ops", "Logic", "Math", "Math2", "Summary", "Complex"), 
+  msg, .xname = get_name_in_parent(x))
+{
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  groups <- match.arg(groups, several.ok = TRUE)
+  if("Ops" %in% groups) 
+  {
+    groups <- unique(c(groups[groups != "Ops"], "Arith", "Compare", "Logic"))
+  }
+  # simplified version of methods::getGroupMembers(group)
+  fns <- unlist(
+    lapply(groups, function(x) getGeneric(x)@groupMembers), 
+    use.names = FALSE
+  )
+  if(!.xname %in% fns)
+  {
+    return(false("%s is not an internal group generic %s.", group, msg))
+  }
+  TRUE
+}
+
+#' @rdname is_s3_generic
+#' @export
+is_s3_internal_generic <- function(x, .xname = get_name_in_parent(x))
+{
+  # logic as per tools:::.get_internal_S3_generics
+  if(!(ok <- is_function(x)))
+  {
+    return(ok)
+  }
+  if(!.xname %in% c(.S3PrimitiveGenerics, S3_GROUP_GENERICS, S3_NON_PRIMITIVE_NON_GROUP_GENERICS))
+  {
+    return(false("%s is not an S3 internal generic function.", .xname))
+  }
+  TRUE
+}
