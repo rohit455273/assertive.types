@@ -1,6 +1,6 @@
 ## Release Summary
 
-This release contains several assertions for checking different types of function.
+This release contains several assertions for checking different types of function, external pointers, and pairlists.
 
 ## Test Environments
 
