@@ -145,6 +145,35 @@ is_expression <- function(x, .xname = get_name_in_parent(x))
   is2(x, "expression", .xname)
 }
 
+#' Is the input is an external pointer?
+#'
+#' Check whether the input is an external pointer. that is, an object of
+#' class (\code{"externalptr"}).
+#' @param x Input to check.
+#' @param .xname Not intended to be used directly.
+#' @param severity How severe should the consequences of the assertion be?  
+#' Either \code{"stop"}, \code{"warning"}, \code{"message"}, or \code{"none"}.
+#' @return \code{is_externalptr} wraps \code{is.data.frame}, 
+#' providing more information on failure.  \code{assert_is_externalptr} 
+#' returns nothing but throws an error if \code{is_externalptr} 
+#' returns \code{FALSE}.
+#' @examples
+#' # The xml2 pkg makes heavy use of external pointers
+#' xptr <- xml2::read_xml("<foo><bar /></foo>")$node
+#' assert_is_externalptr(xptr)
+#' 
+#' # This should fail
+#' assertive.base::dont_stop({
+#' assert_is_externalptr(NULL)
+#' })
+#' @importFrom assertive.base is2
+#' @export
+#' @export
+is_externalptr <- function(x, .xname = get_name_in_parent(x))
+{
+  is2(x, "externalptr", .xname)
+}
+
 #' Is the input a factor?
 #'
 #' Checks to see if the input is an factor.

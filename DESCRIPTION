@@ -2,7 +2,7 @@ Package: assertive.types
 Type: Package
 Title: Assertions to Check Types of Variables
 Version: 0.0-3
-Date: 2016-12-28
+Date: 2016-12-30
 Author: Richard Cotton [aut, cre]
 Maintainer: Richard Cotton <richierocks@gmail.com>
 Authors@R: person("Richard", "Cotton", role = c("aut", "cre"), email =
@@ -24,7 +24,8 @@ Imports:
 Suggests:
     testthat,
     data.table,
-    dplyr
+    dplyr,
+    xml2
 License: GPL (>= 3)
 LazyLoad: yes
 LazyData: yes

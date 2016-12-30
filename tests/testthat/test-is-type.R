@@ -74,12 +74,21 @@ test_that("test.is_environment.not_an_environment.returns_false", {
   expect_false(is_environment(list()))
 })
 
-test_that("test.is_expression.an_environment.returns_true", {
+test_that("test.is_expression.an_expression.returns_true", {
   expect_true(is_expression(expression(sin(pi))))
 })
 
 test_that("test.is_expression.not_an_expression.returns_false", {
   expect_false(is_expression(call("sin", "pi")))
+})
+
+test_that("test.is_externalptr.an_externalptr.returns_true", {
+  xptr <- xml2::read_xml("<foo><bar /></foo>")$node
+  expect_true(is_externalptr(xptr))
+})
+
+test_that("test.is_externalptr.not_an_externalptr.returns_false", {
+  expect_false(is_externalptr(new.env()))
 })
 
 test_that("test.is_factor.a_factor.returns_true", {
