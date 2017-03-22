@@ -2,6 +2,7 @@
 [![Is the package on CRAN?](http://www.r-pkg.org/badges/version/assertive.types)](http://www.r-pkg.org/pkg/assertive.types)
 [![SemaphoreCI Build Status](https://semaphoreci.com/api/v1/projects/4bd0f182-fbc5-4c70-876b-e6f9570fdf3c/635195/badge.svg)](https://semaphoreci.com/richierocks/assertive-types)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/fb50ck21nm0os9rd?svg=true)](https://ci.appveyor.com/project/richierocks/assertive-types)
+[![Research software impact](http://depsy.org/api/package/cran/assertive.types/badge.svg)](http://depsy.org/package/r/assertive.types)
 
 # assertive.types
 
